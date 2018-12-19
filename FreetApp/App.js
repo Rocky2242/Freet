@@ -1,15 +1,58 @@
 import React from 'react';
 import { StyleSheet, Text, View, StatusBar, Platform } from 'react-native';
+import { AppLoading, Font } from 'expo';
+import { RkTheme } from 'react-native-ui-kitten';
+import { DarkKittenTheme } from './app/config/darkTheme.js';
+import { bootstrap } from './app/config/bootstrap.js';
 import IndexView from './app/screens/index.js';
 
+bootstrap();
+
 export default class App extends React.Component {
-  render() {
+  state = {
+    isLoaded: false,
+  }
+
+  constructor(props) {
+    super(props);
+
+    StatusBar.setBarStyle('light-content', true);
+    if (Platform.OS === 'android') {
+      StatusBar.setBackgroundColor(DarkKittenTheme.colors.screen.base);
+    }
+    RkTheme.setTheme(DarkKittenTheme);
+
+    this.loadAssets();
+  } 
+  
+  loadAssets = async () => {
+    await Font.loadAsync({
+      fontawesome: require('./app/assets/fonts/fontawesome.ttf'),
+      icomoon: require('./app/assets/fonts/icomoon.ttf'),
+      'Righteous-Regular': require('./app/assets/fonts/Righteous-Regular.ttf'),
+      'Roboto-Bold': require('./app/assets/fonts/Roboto-Bold.ttf'),
+      'Roboto-Medium': require('./app/assets/fonts/Roboto-Medium.ttf'),
+      'Roboto-Regular': require('./app/assets/fonts/Roboto-Regular.ttf'),
+      'Roboto-Light': require('./app/assets/fonts/Roboto-Light.ttf'),
+    });
+    this.setState({ isLoaded: true });
+  };
+
+  renderLoading() {
+    return (
+      <AppLoading />
+    );
+  }
+
+  renderApp() {
     return (
       <View style={styles.container}>
         <IndexView />
       </View>
     );
   }
+
+  render = () => (this.state.isLoaded ? this.renderApp() : this.renderLoading());
 }
 
 const styles = StyleSheet.create({

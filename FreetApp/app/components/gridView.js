@@ -63,6 +63,7 @@ export default class GridView extends React.Component {
       key={item.id}
       onPress={() => this.onItemPressed(item)}>
       <RkText style={styles.icon} rkType='primary moon xxlarge'>
+        Hi
       </RkText>
       <RkText rkType='small'>{item.title}</RkText>
     </RkButton>
@@ -98,10 +99,6 @@ const styles = RkStyleSheet.create(theme => ({
   child: {
     width: '33%',
     aspectRatio: 1,
-  },
-  empty: {
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: theme.colors.border.base,
   },
   icon: {
     marginBottom: 16,
