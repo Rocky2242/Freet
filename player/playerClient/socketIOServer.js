@@ -1,5 +1,3 @@
-const io = require('socket.io')()
-
 // Add a connect listener
 io.on('connection', function(socket) {
   console.log('Client connected.')
@@ -12,5 +10,3 @@ io.on('connection', function(socket) {
     console.log('Client disconnected.');
   })
 })
-
-io.listen(3000)
