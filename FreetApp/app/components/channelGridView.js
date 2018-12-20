@@ -29,6 +29,7 @@ export default class ChannelGridView extends React.Component {
   renderItems = () => this.props.items.map(this.renderItem);
 
   renderItem = (item) => {
+    console.log('called');
     if(item.categoryId == this.props.selectedCategory || this.props.selectedCategory == '*')
       return (
         <RkButton
@@ -55,7 +56,6 @@ export default class ChannelGridView extends React.Component {
   };
 
   async handleImageLoad() {
-    console.log('called');
     for(let index in this.props.items) {
       let item = this.props.items[index];
       this.imagesPath[item.id] = (await CacheManager.get(item.logoUrl).getPath()) || '';
