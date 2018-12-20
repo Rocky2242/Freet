@@ -46,4 +46,21 @@ export default class Settings {
   static getCategoryId(category) {
     return Settings.getCategoryMap()[category];
   }
+
+  static getDisabledLanguages() {
+    return {
+      'Punjabi': 3,
+      'Bengali': 5,
+      'Malayalam': 7,
+      'Tamil': 8,
+      'Gujarati': 9,
+      'Odia': 10,
+      'Telugu': 11,
+      'Bhojpuri': 12,
+      'Kannada': 13,
+      'Assamese': 14,
+      'Nepali': 15,
+      'French': 16,
+    }
+  }
 }
