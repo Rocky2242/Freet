@@ -55,34 +55,16 @@ export default class ChannelGridView extends React.Component {
   };
 
   async handleImageLoad() {
+    console.log('called');
     for(let index in this.props.items) {
       let item = this.props.items[index];
       this.imagesPath[item.id] = (await CacheManager.get(item.logoUrl).getPath()) || '';
     }
-
-    console.log('All done')
-    this.setState({isLoaded: true});
-    // this.setState({imagesLoaded: this.state.imagesLoaded + 1});
-    // console.log(this.state.imagesLoaded)
-    // if(this.state.imagesLoaded > 50) 
-      // this.setState({isLoaded: true});
-    // else 
-      // this.setState({isLoaded: false});
+    this.props.onLoad();
   }
 
   render() {
     const items = this.renderItems()
-    return this.state.isLoaded ? this.renderLoaded(items) : this.renderLoading();
-  }
-
-
-  renderLoading() {
-    return (
-      <ActivityIndicator size="large" />
-    );
-  }
-
-  renderLoaded(items){
     return (
       <ScrollView
         style={styles.root}
