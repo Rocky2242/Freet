@@ -56,9 +56,18 @@ export default class Index extends React.Component {
     const channels = _.filter(this.state.channels, channel => {
       const filterResult = {
         name: channel.name.search(pattern),
+        category: channel.categoryId,
       };
-      return filterResult.name !== -1 ? channel : undefined;
+
+      if( filterResult.name !== -1 && (
+          filterResult.category === this.state.selectedCategory || 
+          this.state.selectedCategory === '*'
+      )) 
+        return channel;
+      else
+        return undefined;
     });
+
     this.setState({
       filteredChannels: channels
     });
@@ -83,7 +92,7 @@ export default class Index extends React.Component {
     return (
       <View>
         {this.renderHeader()}
-        <ChannelGridView style={{width: '100%', backgroundColor: 'red'}} onLoad={this.onLoad} selectedCategory={this.state.selectedCategory} items={this.state.filteredChannels || this.state.channels} />
+        <ChannelGridView style={{width: '100%', backgroundColor: 'red'}} onLoad={this.onLoad} items={this.state.filteredChannels || this.state.channels} />
       </View>
     );
   }
@@ -113,11 +122,11 @@ export default class Index extends React.Component {
           onValueChange={this.onCategoryChange.bind(this)} >
           {
             Object.entries(Settings.getCategoryMap())
-            .map(([categoryName, categoryId]) => {
-              return (
-                <Picker.Item key={categoryId} label={categoryName} value={categoryId} />
-              );
-            })
+              .map(([categoryName, categoryId]) => {
+                return (
+                  <Picker.Item key={categoryId} label={categoryName} value={categoryId} />
+                );
+              })
           }
         </Picker>
       </View>
