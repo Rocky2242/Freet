@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  ScrollView,
+  FlatList,
   View,
   StyleSheet,
   ActivityIndicator,
@@ -17,9 +17,8 @@ export default class ChannelGridView extends React.Component {
   state = {
     imagesLoaded: 0,
     isLoaded: false,
+    imagesPath: {}
   }
-
-  imagesPath = {}
 
   constructor(props) {
     super(props);
@@ -28,27 +27,22 @@ export default class ChannelGridView extends React.Component {
 
   renderItems = () => this.props.items.map(this.renderItem);
 
-  renderItem = (item) => {
-    console.log('called');
-    if(item.categoryId == this.props.selectedCategory || this.props.selectedCategory == '*')
-      return (
-        <RkButton
-          rkType='tile'
-          style={styles.child}
-          key={item.id}
-          categoryId={item.categoryId}
-          onPress={() => this.onItemPressed(item)}>
-          <View style={styles.icon} rkType='primary moon xxlarge'>
-            <RNImage 
-              style={{height: 100, width: 130}} 
-              source={{isStatic: true, uri: this.imagesPath[item.id]}}
-              uri={this.imagesPath[item.id]} 
-            />
-          </View>
-          <RkText style={{textAlign: 'center'}} rkType='small'>{item.name.replace(/HD/, '')}</RkText>
-        </RkButton>
-      );
-  };
+  renderItem = (item) => (
+    <RkButton
+      rkType='tile'
+      style={styles.child}
+      key={item.id}
+      categoryId={item.categoryId}
+      onPress={() => this.onItemPressed(item)}>
+      <View style={styles.icon} rkType='primary moon xxlarge'>
+        <RNImage 
+          style={{height: 100, width: 130}} 
+          source={{isStatic: true, uri: this.state.imagesPath[item.id]}}
+        />
+      </View>
+      <RkText style={{textAlign: 'center'}} rkType='small'>{item.name.replace(/HD/, '')}</RkText>
+    </RkButton>
+  );
 
   onItemPressed = (item) => {
     console.log('pressed', item)
@@ -56,21 +50,24 @@ export default class ChannelGridView extends React.Component {
   };
 
   async handleImageLoad() {
+    let imagesPath = {}
     for(let index in this.props.items) {
       let item = this.props.items[index];
-      this.imagesPath[item.id] = (await CacheManager.get(item.logoUrl).getPath()) || '';
+      imagesPath[item.id] = (await CacheManager.get(item.logoUrl).getPath()) || '';
     }
+    this.setState({imagesPath});
     this.props.onLoad();
   }
 
   render() {
-    const items = this.renderItems()
     return (
-      <ScrollView
-        style={styles.root}
-        contentContainerStyle={styles.rootContainer}>
-        {items}
-      </ScrollView>
+      <FlatList
+        extraData={[this.state, this.props]}
+        numColumns={2}
+        data={this.props.items}
+        renderItem={({ item }) => this.renderItem(item)} 
+        keyExtractor={(item, index) => item.id.toString()}
+      />
     );
   }
 }
@@ -78,13 +75,10 @@ export default class ChannelGridView extends React.Component {
 const styles = RkStyleSheet.create(theme => ({
   root: {
     backgroundColor: theme.colors.screen.base,
+    backgroundColor: 'red',
     width: '100%',
     flex: 1,
-  },
-  rootContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    flexGrow: 1,
+    flexDirection: 'column',
   },
   child: {
     width: '50%',
