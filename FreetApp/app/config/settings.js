@@ -1,6 +1,7 @@
 import store from 'react-native-simple-store';
 
 const DEFAULT_BASE_URL = 'http://sgdccdnems03.cdnsrv.jio.com';
+const DEFAULT_SOCKET_SERVER_URL = 'http://raspberrypi.local:3000';
 const DEFAULT_BITRATE = '800';
 
 export default class Settings {
@@ -26,6 +27,14 @@ export default class Settings {
 
   static async getImageBaseUrl() {
     return `http://smumcdnems03.cdnsrv.jio.com/mumsite.cdnsrv.jio.com/jiotv.catchup.cdn.jio.com/dare_images/images`
+  }
+
+  static async setSocketServerUrl(url) {
+    return await(store.save('socketServerUrl'))
+  }
+
+  static async getSocketServerUrl() {
+    return (await(store.get('socketServerUrl')) || DEFAULT_SOCKET_SERVER_URL)
   }
 
   static getCategoryMap() {
