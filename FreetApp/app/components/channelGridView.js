@@ -12,6 +12,8 @@ import {
   RkStyleSheet,
 } from 'react-native-ui-kitten';
 import {Image, CacheManager} from "react-native-expo-image-cache";
+import SocketIOClient from 'socket.io-client';
+import Settings from '../config/settings.js'
 
 export default class ChannelGridView extends React.Component {
   state = {
@@ -22,7 +24,7 @@ export default class ChannelGridView extends React.Component {
 
   constructor(props) {
     super(props);
-    this.handleImageLoad();
+    this.initSocketAndLoadImages();
   }
 
   renderItems = () => this.props.items.map(this.renderItem);
@@ -44,12 +46,18 @@ export default class ChannelGridView extends React.Component {
     </RkButton>
   );
 
-  onItemPressed = (item) => {
-    console.log('pressed', item)
-
+  onItemPressed = async (item) => {
+    const base = await(Settings.getBaseUrl()) + '/jiotv.live.cdn.jio.com';
+    const quality = await(Settings.getBitrate());
+    const streamUrl = `${base}/${item.streamUrl}/${item.streamUrl}_${quality}.m3u8`;
+    this.socket.emit('updateSrc', streamUrl);
   };
 
-  async handleImageLoad() {
+  async initSocketAndLoadImages() {
+    //Initialize Socket.IO connection
+    this.socket = SocketIOClient(await Settings.getSocketServerUrl());
+
+    //Load Images
     let imagesPath = {}
     for(let index in this.props.items) {
       let item = this.props.items[index];

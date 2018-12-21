@@ -41,10 +41,11 @@ export default class Index extends React.Component {
             name: channel_name,
             categoryId: channelCategoryId,
             languageId: channelLanguageId,
+            streamUrl: channel_name.replace(/ /g, '_'),
             logoUrl: `${imageBaseUrl}/${logoUrl}`
           });
       });
-      this.setState({channels: parsedChannels.slice(-10), channelsLoaded: true});
+      this.setState({channels: parsedChannels, channelsLoaded: true});
     } catch(error) {
       console.log(error, 'While fetching channels');
     }
