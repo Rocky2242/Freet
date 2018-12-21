@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, TouchableOpacity, Picker } from 'react-native';
 import { RkStyleSheet, RkChoice, RkChoiceGroup, RkText, RkTextInput } from 'react-native-ui-kitten';
 import _ from 'lodash';
 import { FontAwesome } from './../assets/icons.js';
@@ -10,6 +10,7 @@ export default class Index extends React.Component {
   state = {
     isLoaded: false,
     channelsLoaded: false,
+    selectedCategory: '*',
   }
 
   constructor(props) {
@@ -43,7 +44,7 @@ export default class Index extends React.Component {
             logoUrl: `${imageBaseUrl}/${logoUrl}`
           });
       });
-      this.setState({channels: parsedChannels, channelsLoaded: true});
+      this.setState({channels: parsedChannels.slice(-10), channelsLoaded: true});
     } catch(error) {
       console.log(error, 'While fetching channels');
     }
@@ -51,7 +52,6 @@ export default class Index extends React.Component {
 
 
   onInputChanged = (event) => {
-    console.log('filtered fired')
     const pattern = new RegExp(event.nativeEvent.text, 'i');
     const channels = _.filter(this.state.channels, channel => {
       const filterResult = {
@@ -62,8 +62,16 @@ export default class Index extends React.Component {
     this.setState({
       filteredChannels: channels
     });
-    console.log('filtered ready')
   };
+
+  onCategoryChange = (categoryId) => {
+    this.setState({
+      filteredChannels: this.state.channels.filter(channel => {
+        return channel.categoryId == categoryId || categoryId === '*'
+      }),
+      selectedCategory: categoryId
+    });
+  }
 
   renderLoading() {
     return (
@@ -75,7 +83,7 @@ export default class Index extends React.Component {
     return (
       <View>
         {this.renderHeader()}
-        <ChannelGridView onLoad={this.onLoad} selectedCategory={'*'} items={this.state.filteredChannels || this.state.channels} />
+        <ChannelGridView style={{width: '100%', backgroundColor: 'red'}} onLoad={this.onLoad} selectedCategory={this.state.selectedCategory} items={this.state.filteredChannels || this.state.channels} />
       </View>
     );
   }
@@ -85,15 +93,34 @@ export default class Index extends React.Component {
   );
 
   renderHeader = () => (
-    <View style={styles.searchContainer}>
-      <RkTextInput
-        autoCapitalize='none'
-        autoCorrect={false}
-        onChange={this.onInputChanged}
-        label={this.renderInputLabel()}
-        rkType='row'
-        placeholder='Search'
-      />
+    <View style={styles.header}>
+      <View style={styles.searchContainer}>
+        <RkTextInput
+          autoCapitalize='none'
+          autoCorrect={false}
+          onChange={this.onInputChanged}
+          label={this.renderInputLabel()}
+          rkType='row'
+          placeholder='Search'
+        />
+      </View>
+      <View style={styles.pickerContainer}>
+        <RkText style={styles.pickerIcon}></RkText>
+        <Picker
+          mode='dropdown'
+          selectedValue={this.state.selectedCategory}
+          style={styles.categoryPicker}
+          onValueChange={this.onCategoryChange.bind(this)} >
+          {
+            Object.entries(Settings.getCategoryMap())
+            .map(([categoryName, categoryId]) => {
+              return (
+                <Picker.Item key={categoryId} label={categoryName} value={categoryId} />
+              );
+            })
+          }
+        </Picker>
+      </View>
     </View>
   );
 
@@ -117,13 +144,42 @@ const styles = RkStyleSheet.create((theme) => ({
     backgroundColor: theme.colors.screen.base,
     position: 'relative',
   },
+  header: {
+    flexDirection: 'row',
+    paddingHorizontal: 10,
+    paddingVertical: 15,
+    alignItems: 'center',
+    height: 80,
+    width: '100%',
+  },
   searchContainer: {
     backgroundColor: theme.colors.screen.bold,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    height: 60,
-    alignItems: 'center',
-    width: '100%',
+    minWidth: '55%',
+    marginRight: 25,
+  },
+  pickerContainer: {
+    flex: 1,
+    marginLeft: -5,
+    position: 'relative',
+    borderColor: theme.colors.screen.info,
+    borderRadius: 10,
+    borderWidth: 1,
+    overflow: 'hidden',
+  },
+  pickerIcon: {
+    zIndex: 1500,
+    fontFamily: 'fontawesome',
+    fontSize: 12,
+    color: theme.colors.screen.info,
+    position: 'absolute',
+    top:0,
+    bottom: 0,
+    right: 5,
+    textAlignVertical: 'center',
+  },
+  categoryPicker: {
+    color: theme.colors.screen.info,
+    backgroundColor: theme.colors.screen.base,
   },
   loader: {
     position: 'absolute',
