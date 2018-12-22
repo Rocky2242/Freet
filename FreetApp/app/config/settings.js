@@ -1,32 +1,33 @@
 import store from 'react-native-simple-store';
 
 const DEFAULT_BASE_URL = 'http://sgdccdnems03.cdnsrv.jio.com';
+const DEFAULT_IMAGE_BASE_URL = 'http://smumcdnems03.cdnsrv.jio.com/mumsite.cdnsrv.jio.com/jiotv.catchup.cdn.jio.com/dare_images/images';
 const DEFAULT_SOCKET_SERVER_URL = 'http://raspberrypi.local:3000';
 const DEFAULT_BITRATE = '800';
 
 export default class Settings {
-  static async getBaseUrl() {
-    return (await(store.get('baseUrl')) || DEFAULT_BASE_URL)
-  }
-
   static async setBaseUrl(url) {
     return await(store.save('baseUrl', url))
   }
 
-  static async getBitrate() {
-    return (await(store.get('bitrate')) || DEFAULT_BITRATE)
+  static async getBaseUrl() {
+    return (await(store.get('baseUrl')) || DEFAULT_BASE_URL)
   }
 
   static async setBitrate(bitrate) {
     return await(store.save('bitrate', bitrate))
   }
 
-  static async getChannelListUrl() {
-    return `${await Settings.getBaseUrl()}/gdcsite.cdnsrv.jio.com/jiotv.data.cdn.jio.com/apis/v1.3/getMobileChannelList/get/?os=android&devicetype=phone`
+  static async getBitrate() {
+    return (await(store.get('bitrate')) || DEFAULT_BITRATE)
+  }
+
+  static async setImageBaseUrl(url) {
+    return await(store.save('imageBaseUrl', url));
   }
 
   static async getImageBaseUrl() {
-    return `http://smumcdnems03.cdnsrv.jio.com/mumsite.cdnsrv.jio.com/jiotv.catchup.cdn.jio.com/dare_images/images`
+    return (await(store.get('imageBaseUrl')) || DEFAULT_IMAGE_BASE_URL)
   }
 
   static async setSocketServerUrl(url) {
@@ -35,6 +36,10 @@ export default class Settings {
 
   static async getSocketServerUrl() {
     return (await(store.get('socketServerUrl')) || DEFAULT_SOCKET_SERVER_URL)
+  }
+
+  static async getChannelListUrl() {
+    return `${await Settings.getBaseUrl()}/gdcsite.cdnsrv.jio.com/jiotv.data.cdn.jio.com/apis/v1.3/getMobileChannelList/get/?os=android&devicetype=phone`
   }
 
   static getCategoryMap() {
