@@ -74,6 +74,8 @@ export const DarkKittenTheme = {
     accent: Colors.accent,
     primary: Colors.primary,
     disabled: Colors.disabled,
+    danger: Colors.danger,
+    success: Colors.success,
     twitter: Colors.twitter,
     google: Colors.google,
     facebook: Colors.facebook,

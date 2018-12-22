@@ -8,6 +8,7 @@ import { DarkKittenTheme } from './app/config/darkTheme.js';
 import { bootstrap } from './app/config/bootstrap.js';
 import IndexView from './app/screens/index.js';
 import SettingsView from './app/screens/settings.js';
+import Header from './app/components/header.js';
 import 'react-native-gesture-handler'; 
 
 bootstrap();
@@ -67,23 +68,7 @@ export default class App extends React.Component {
         Main: {
           screen: DrawerNavigator,
           navigationOptions: ({ navigation }) => ({
-            title: 'Freet',
-            headerTintColor: 'white',
-            headerLeft: (
-              <RkButton 
-                rkType='clear' 
-                style={{ 
-                  paddingHorizontal: 25, 
-                  paddingVertical: 15,
-                  marginRight: 15,
-                }}
-                onPress={navigation.openDrawer}>
-                <RkText rkType='header3 awesome'>{FontAwesome.bars}</RkText>
-              </RkButton>),
-            headerStyle: {
-              backgroundColor: DarkKittenTheme.colors.screen.base,
-              height: 80,
-            }
+            header: (props) => <Header navigation={navigation} headerProps={props} />,
           }),
         }
       }
@@ -96,15 +81,15 @@ export default class App extends React.Component {
         <AppContainer />
       </View>
     )
-      }
+  }
 
-      render = () => (this.state.isLoaded ? this.renderApp() : this.renderLoading());
-    }
+  render = () => (this.state.isLoaded ? this.renderApp() : this.renderLoading());
+}
 
-  const styles = RkStyleSheet.create((theme) => ({
-    container: {
-      flex: 1,
-      // marginTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight,
-      backgroundColor: theme.colors.screen.base,
-    },
-  }));
+const styles = RkStyleSheet.create((theme) => ({
+  container: {
+    flex: 1,
+    // marginTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight,
+    backgroundColor: theme.colors.screen.base,
+  },
+}));
