@@ -1,17 +1,21 @@
 import React from 'react';
-import { View, StyleSheet, ActivityIndicator, TouchableOpacity, Picker } from 'react-native';
-import { RkStyleSheet, RkChoice, RkChoiceGroup, RkText, RkTextInput } from 'react-native-ui-kitten';
+import { View, StyleSheet, ActivityIndicator,  Picker } from 'react-native';
+import { RkStyleSheet, RkText, RkTextInput } from 'react-native-ui-kitten';
 import _ from 'lodash';
 import { FontAwesome } from './../assets/icons.js';
 import ChannelGridView from './../components/channelGridView.js';
 import Settings from './../config/settings.js';
 
 export default class Index extends React.Component {
+  static navigationOptions = {
+    drawerLabel: 'Home',
+  };
+
   state = {
     isLoaded: false,
     channelsLoaded: false,
-    selectedCategory: '*',
-  }
+    selectedCategory: '*'
+  };
 
   constructor(props) {
     super(props);
@@ -163,7 +167,6 @@ const styles = RkStyleSheet.create((theme) => ({
     width: '100%',
   },
   searchContainer: {
-    backgroundColor: theme.colors.screen.bold,
     minWidth: '55%',
     marginRight: 25,
   },
@@ -171,25 +174,26 @@ const styles = RkStyleSheet.create((theme) => ({
     flex: 1,
     marginLeft: -5,
     position: 'relative',
-    borderColor: theme.colors.screen.info,
-    borderRadius: 10,
-    borderWidth: 1,
     overflow: 'hidden',
+    backgroundColor: 'green',
+    backgroundColor: theme.colors.screen.alter,
+    borderRadius: 20,
+    borderWidth: 0,
   },
   pickerIcon: {
     zIndex: 1500,
     fontFamily: 'fontawesome',
     fontSize: 12,
-    color: theme.colors.screen.info,
+    color: theme.colors.text.hint,
     position: 'absolute',
     top:0,
     bottom: 0,
-    right: 5,
+    right: 15,
     textAlignVertical: 'center',
   },
   categoryPicker: {
-    color: theme.colors.screen.info,
-    backgroundColor: theme.colors.screen.base,
+    color: theme.colors.text.hint,
+    marginLeft: 10,
   },
   loader: {
     position: 'absolute',
