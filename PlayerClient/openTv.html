@@ -1,0 +1,58 @@
+<html>
+    <head>
+      <title>Redirect after Delay</title>
+
+      <style>
+        * {
+            font-family:arial;
+        }
+
+        body{}
+      </style>
+
+      <script>
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+
+        function nvl(value,defaultValue)
+        {
+          if (value == null)
+            return defaultValue;
+          if (value == "")
+            return defaultValue;
+          if (value)
+            return value;
+          return defaultValue;
+        }
+
+        var url = 'http://localhost:3000';
+        var seconds = nvl(parseInt(getParameterByName('delay')), 5);
+        var delay = seconds * 1000;
+        var showInfoDelay = nvl(parseInt(getParameterByName('showInfoDelay')), 3) * 1000;
+
+        document.title=url;
+
+        setTimeout(function()
+        {
+          window.location = url;
+        }, delay);
+        console.log('loaded');
+
+        setTimeout(function()
+        {
+          document.write('Opening Tv in ' + seconds + ' seconds.');
+        }, showInfoDelay);
+
+      </script>
+
+    </head>
+  <body>
+  </body>
+</html>

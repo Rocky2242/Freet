@@ -13,7 +13,7 @@ app.get('/', function(req, res) {
 });
 httpServer.listen(3000, () => {
   console.log('listening');
-  exec('chromium-browser --kiosk --autoplay-policy=no-user-gesture-required http://localhost:3000',(err, stdout, stdin) => {
+  exec('chromium-browser --kiosk --autoplay-policy=no-user-gesture-required openTv.html',(err, stdout, stdin) => {
     console.log(err);
     console.log(stdout);
   })
