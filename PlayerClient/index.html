@@ -24,17 +24,21 @@
 
 	<script>
 		var src = {
-				hls: 'http://smumcdnems03.cdnsrv.jio.com/jiotv.live.cdn.jio.com/Sony_SAB_HD/Sony_SAB_HD_400.m3u8'
+				hls: 'http://smumcdnems03.cdnsrv.jio.com/jiotv.live.cdn.jio.com/Sony_SAB_HD/Sony_SAB_HD_800.m3u8'
 			}
 			var settings = {
 				licenseKey: 'Kl8lbz16cz1rN2l2enM9Z2M9NnZvMnllaT9yb201ZGFzaXMzMGRiMEElXyo=',
 				src: src,
 				autoHeightMode: true,
 				autoplay: true,
+				muted: false,
 				skin: 's1', 
 			};
 		var elementID = 'rmpPlayer';
 		var rmp = new RadiantMP(elementID);
 		rmp.init(settings);
+		setInterval(() => {
+			if(rmp && rmp.muted) rmp.setMute(false)
+		}, 1500);
 	</script>
 </html>
