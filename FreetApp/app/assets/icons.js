@@ -15,6 +15,7 @@ export const FontIcons = {
 export const FontAwesome = {
   powerOn: String.fromCharCode(61457),
   circle: String.fromCharCode(61713),
+  refresh: String.fromCharCode(61473),
   heart: String.fromCharCode(61444),
   comment: String.fromCharCode(61669),
   user: String.fromCharCode(62144),

@@ -12,15 +12,13 @@ export default class Header extends React.Component {
   }
 
   componentDidMount() {
-    setInterval(this.updateServerStatus.bind(this), 100);
+    setInterval(this.updateServerStatus.bind(this), 5000);
     this.updateServerStatus();
   }
 
   async updateServerStatus() {
-    let serverUrl = await Settings.getSocketServerUrl();
-    let serverAvailable = await isAvailable(serverUrl);
-    this.setState({serverAvailable: true});
-    console.log(serverAvailable)
+    let serverAvailable = await isAvailable(await Settings.getSocketServerUrl());
+    this.setState({serverAvailable});
   }
 
   render() {
@@ -48,11 +46,12 @@ export default class Header extends React.Component {
           <RkButton
             rkType='clear'
             style={{
-              paddingHorizontal: 20,
+              paddingHorizontal: 25,
               paddingVertical: 15,
-              marginLeft: 10,
-            }}>
-            <RkText rkType='header3 awesome'>{FontAwesome.powerOn}</RkText>
+              marginLeft: 15,
+            }}
+            onPress={this.updateServerStatus.bind(this)}>
+            <RkText rkType='header3 awesome'>{FontAwesome.refresh}</RkText>
           </RkButton>
         </View>
       </View>
